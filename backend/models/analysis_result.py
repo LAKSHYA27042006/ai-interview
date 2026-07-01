@@ -40,7 +40,11 @@ class AudioMetrics:
 
     average_volume: float = 0
 
+    average_pitch: float = 0
+
     pitch_variation: float = 0
+
+    duration_seconds: float = 0
 
     pause_count: int = 0
 

@@ -1,52 +1,47 @@
-from groq import Groq
-
-
 class FeedbackService:
 
-    def __init__(self, api_key):
-        self.client = Groq(api_key=api_key)
-
+    @staticmethod
     def generate_feedback(
-        self,
-        communication_metrics,
         eye_contact_score,
-        voice_metrics,
-        confidence_score
+        words_per_minute,
+        vocabulary_score
     ):
 
-        prompt = f"""
-You are a senior technical recruiter.
+        strengths = []
+        improvements = []
 
-Analyze the interview metrics and provide:
+        if eye_contact_score >= 75:
+            strengths.append(
+                "Maintains strong eye contact"
+            )
+        else:
+            improvements.append(
+                "Improve eye contact during conversation"
+            )
 
-1. Strengths
-2. Areas for Improvement
-3. Overall Assessment
-4. Interview Readiness Score (/100)
+        if 120 <= words_per_minute <= 170:
+            strengths.append(
+                "Good speaking pace"
+            )
+        else:
+            improvements.append(
+                "Maintain a more consistent speaking pace"
+            )
 
-Metrics:
+        if vocabulary_score >= 0.6:
+            strengths.append(
+                "Uses strong vocabulary"
+            )
+        else:
+            improvements.append(
+                "Use more professional vocabulary"
+            )
 
-Words Per Minute: {communication_metrics['words_per_minute']}
-Vocabulary Score: {communication_metrics['vocabulary_score']}
-Filler Words: {communication_metrics['filler_words']}
-
-Eye Contact Score: {eye_contact_score}
-
-Average Pitch: {voice_metrics['avg_pitch']}
-Pitch Variation: {voice_metrics['pitch_variation']}
-Voice Energy: {voice_metrics['avg_energy']}
-
-Confidence Score: {confidence_score}
-"""
-
-        response = self.client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
+        feedback = (
+            "Strengths: "
+            + ", ".join(strengths)
+            + " | Improvements: "
+            + ", ".join(improvements)
         )
 
-        return response.choices[0].message.content
+        return feedback
